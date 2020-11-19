@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
   s.swift_version = '5.0'
   s.source       = { :git => "https://github.com/bizz84/SwiftyStoreKit.git", :tag => s.version }
 
-  s.source_files = 'SwiftyStoreKit/*.{swift}'
+  s.source_files = 'Sources/SwiftyStoreKit/*.{swift}'
 
   s.screenshots  = ["https://github.com/bizz84/SwiftyStoreKit/raw/master/Screenshots/Preview.jpg"]
 
