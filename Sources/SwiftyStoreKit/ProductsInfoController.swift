@@ -44,6 +44,9 @@ class ProductsInfoController: NSObject {
     }
     
     let inAppProductRequestBuilder: InAppProductRequestBuilder
+    
+    let lock = NSLock()
+
     init(inAppProductRequestBuilder: InAppProductRequestBuilder = InAppProductQueryRequestBuilder()) {
         self.inAppProductRequestBuilder = inAppProductRequestBuilder
     }
@@ -54,8 +57,18 @@ class ProductsInfoController: NSObject {
     @discardableResult
     func retrieveProductsInfo(_ productIds: Set<String>, completion: @escaping (RetrieveResults) -> Void) -> InAppProductRequest {
 
+        lock.lock()
+        defer {
+            lock.unlock()
+        }
+        
         if inflightRequests[productIds] == nil {
             let request = inAppProductRequestBuilder.request(productIds: productIds) { results in
+                
+                self.lock.lock()
+                defer {
+                    self.lock.unlock()
+                }
                 
                 if let query = self.inflightRequests[productIds] {
                     for completion in query.completionHandlers {
